@@ -3,7 +3,65 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>File Sharing Platform</title>
+    <title>SecureShare - File Sharing System</title>
+    <link rel="stylesheet" href="css/main.css" />
   </head>
-  <body></body>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🔒 SecureShare</h1>
+        <p>Share files securely with expiration and download limits</p>
+      </div>
+
+      <div class="upload-section">
+        <div class="upload-area" id="uploadArea">
+          <div class="upload-icon">📁</div>
+          <div class="upload-text">Drop files here or click to browse</div>
+          <div class="upload-subtext">Maximum 5 files, 100MB each</div>
+        </div>
+
+        <input type="file" id="fileInput" multiple accept="*/*" />
+
+        <div class="file-list" id="fileList"></div>
+
+        <div class="options">
+          <div class="option-group">
+            <label for="expiryHours">Expiry (hours)</label>
+            <select id="expiryHours">
+              <option value="">Never expire</option>
+              <option value="1">1 hour</option>
+              <option value="24">24 hours</option>
+              <option value="168">1 week</option>
+              <option value="720">1 month</option>
+            </select>
+          </div>
+
+          <div class="option-group">
+            <label for="maxDownloads">Download limit</label>
+            <select id="maxDownloads">
+              <option value="">Unlimited</option>
+              <option value="1">1 download</option>
+              <option value="5">5 downloads</option>
+              <option value="10">10 downloads</option>
+              <option value="50">50 downloads</option>
+            </select>
+          </div>
+        </div>
+
+        <button class="upload-btn" id="uploadBtn" disabled>Upload Files</button>
+
+        <div class="progress-container" id="progressContainer">
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+        </div>
+
+        <div class="error" id="errorDiv"></div>
+
+        <div class="results" id="results"></div>
+      </div>
+    </div>
+
+    <script src="js/upload.js"></script>
+  </body>
 </html>
