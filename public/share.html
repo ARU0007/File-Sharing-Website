@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>SecureShare - Download File</title>
+    <link rel="stylesheet" href="../css/share.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>🔒 SecureShare</h1>
+        <p>Secure file download</p>
+      </div>
+
+      <div class="content">
+        <div id="loading" class="loading">
+          <div class="spinner"></div>
+          <p>Loading file information...</p>
+        </div>
+
+        <div id="fileInfo" class="file-info" style="display: none">
+          <div class="file-icon">📄</div>
+          <div class="file-name" id="fileName"></div>
+
+          <div class="file-details">
+            <div class="detail-row">
+              <span class="detail-label">File Size:</span>
+              <span class="detail-value" id="fileSize"></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Upload Date:</span>
+              <span class="detail-value" id="uploadDate"></span>
+            </div>
+            <div class="detail-row">
+              <span class="detail-label">Downloads:</span>
+              <span class="detail-value" id="downloadCount"></span>
+            </div>
+            <div class="detail-row" id="expiryRow" style="display: none">
+              <span class="detail-label">Expires:</span>
+              <span class="detail-value" id="expiryDate"></span>
+            </div>
+          </div>
+
+          <button class="download-btn" id="downloadBtn">
+            <span class="download-icon">⬇️</span>
+            Download File
+          </button>
+
+          <div class="security-info">
+            <p>
+              🔒 This file is shared securely and may have download limits or
+              expiration dates.
+            </p>
+          </div>
+        </div>
+
+        <div id="errorMessage" class="error-message" style="display: none">
+          <div class="error-icon">❌</div>
+          <div class="error-text" id="errorText"></div>
+          <button class="retry-btn" id="retryBtn">Try Again</button>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>
+          Create your own secure file sharing links at
+          <a href="/">SecureShare</a>
+        </p>
+      </div>
+    </div>
+
+    <script src="../js/share.js"></script>
+  </body>
+</html>
