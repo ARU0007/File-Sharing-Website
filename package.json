@@ -1,12 +1,23 @@
 {
   "name": "fliesharing-system",
   "version": "1.0.0",
-  "description": "��#\u0000 \u0000F\u0000i\u0000l\u0000e\u0000 \u0000S\u0000h\u0000a\u0000r\u0000i\u0000n\u0000g\u0000 \u0000W\u0000e\u0000b\u0000s\u0000i\u0000t\u0000e\u0000\r\u0000 \u0000",
+  "description": "File Sharing Website",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "file-sharing",
+    "website"
+  ],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.1",
+    "helmet": "^8.1.0",
+    "multer": "^2.0.1"
+  }
 }
