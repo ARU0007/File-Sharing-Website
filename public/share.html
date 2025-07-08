@@ -4,7 +4,222 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>SecureShare - Download File</title>
-    <link rel="stylesheet" href="../css/share.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        width: 100%;
+        max-width: 600px;
+      }
+
+      .header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 40px;
+        text-align: center;
+      }
+
+      .header h1 {
+        font-size: 2.5rem;
+        margin-bottom: 10px;
+        font-weight: 700;
+      }
+
+      .header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+      }
+
+      .download-container {
+        padding: 40px;
+      }
+
+      .file-info-card {
+        background: #f8f9ff;
+        border: 1px solid #e0e6ff;
+        border-radius: 15px;
+        padding: 30px;
+        text-align: center;
+        margin-bottom: 30px;
+      }
+
+      .file-icon {
+        font-size: 4rem;
+        color: #667eea;
+        margin-bottom: 20px;
+      }
+
+      .file-name {
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 20px;
+        word-break: break-word;
+      }
+
+      .file-details {
+        color: #666;
+        margin-bottom: 20px;
+      }
+
+      .info-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 8px;
+        padding: 5px 0;
+      }
+
+      .info-label {
+        font-weight: 600;
+        color: #555;
+      }
+
+      .info-value {
+        color: #333;
+      }
+
+      .download-btn {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border: none;
+        padding: 15px 40px;
+        font-size: 1.2rem;
+        border-radius: 50px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 20px;
+        font-weight: 600;
+      }
+
+      .download-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+      }
+
+      .download-btn:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        transform: none;
+        background: #ccc;
+      }
+
+      .error-message {
+        background: #ffebee;
+        color: #c62828;
+        padding: 20px;
+        border-radius: 10px;
+        border-left: 4px solid #c62828;
+        margin-bottom: 20px;
+        text-align: center;
+      }
+
+      .loading {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+      }
+
+      .loading-spinner {
+        display: inline-block;
+        width: 40px;
+        height: 40px;
+        border: 4px solid #f3f3f3;
+        border-top: 4px solid #667eea;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-bottom: 20px;
+      }
+
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+
+      .back-link {
+        display: inline-block;
+        margin-top: 20px;
+        color: #667eea;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+      }
+
+      .back-link:hover {
+        color: #764ba2;
+      }
+
+      .warning {
+        background: #fff3cd;
+        color: #856404;
+        padding: 15px;
+        border-radius: 8px;
+        border-left: 4px solid #ffc107;
+        margin-bottom: 20px;
+        font-size: 0.9rem;
+      }
+
+      @media (max-width: 768px) {
+        .container {
+          margin: 10px;
+          border-radius: 15px;
+        }
+
+        .header {
+          padding: 30px 20px;
+        }
+
+        .header h1 {
+          font-size: 2rem;
+        }
+
+        .download-container {
+          padding: 20px;
+        }
+
+        .file-info-card {
+          padding: 20px;
+        }
+
+        .download-btn {
+          padding: 12px 30px;
+          font-size: 1rem;
+        }
+
+        .info-row {
+          flex-direction: column;
+          text-align: center;
+        }
+
+        .info-label {
+          margin-bottom: 5px;
+        }
+      }
+    </style>
   </head>
   <body>
     <div class="container">
@@ -13,63 +228,244 @@
         <p>Secure file download</p>
       </div>
 
-      <div class="content">
-        <div id="loading" class="loading">
-          <div class="spinner"></div>
+      <div class="download-container">
+        <div class="loading" id="loading">
+          <div class="loading-spinner"></div>
           <p>Loading file information...</p>
         </div>
 
-        <div id="fileInfo" class="file-info" style="display: none">
-          <div class="file-icon">📄</div>
+        <div
+          class="error-message"
+          id="errorMessage"
+          style="display: none"
+        ></div>
+
+        <div class="file-info-card" id="fileInfo" style="display: none">
+          <div class="file-icon" id="fileIcon">📄</div>
           <div class="file-name" id="fileName"></div>
-
           <div class="file-details">
-            <div class="detail-row">
-              <span class="detail-label">File Size:</span>
-              <span class="detail-value" id="fileSize"></span>
+            <div class="info-row">
+              <span class="info-label">Size:</span>
+              <span class="info-value" id="fileSize"></span>
             </div>
-            <div class="detail-row">
-              <span class="detail-label">Upload Date:</span>
-              <span class="detail-value" id="uploadDate"></span>
+            <div class="info-row">
+              <span class="info-label">Uploaded:</span>
+              <span class="info-value" id="uploadDate"></span>
             </div>
-            <div class="detail-row">
-              <span class="detail-label">Downloads:</span>
-              <span class="detail-value" id="downloadCount"></span>
+            <div class="info-row" id="downloadInfoRow">
+              <span class="info-label">Downloads:</span>
+              <span class="info-value" id="downloadInfo"></span>
             </div>
-            <div class="detail-row" id="expiryRow" style="display: none">
-              <span class="detail-label">Expires:</span>
-              <span class="detail-value" id="expiryDate"></span>
+            <div class="info-row" id="expiryInfoRow">
+              <span class="info-label">Expires:</span>
+              <span class="info-value" id="expiryInfo"></span>
             </div>
           </div>
 
-          <button class="download-btn" id="downloadBtn">
-            <span class="download-icon">⬇️</span>
-            Download File
+          <div id="warningMessage" class="warning" style="display: none"></div>
+
+          <button
+            class="download-btn"
+            id="downloadBtn"
+            onclick="downloadFile()"
+          >
+            📥 Download File
           </button>
-
-          <div class="security-info">
-            <p>
-              🔒 This file is shared securely and may have download limits or
-              expiration dates.
-            </p>
-          </div>
         </div>
 
-        <div id="errorMessage" class="error-message" style="display: none">
-          <div class="error-icon">❌</div>
-          <div class="error-text" id="errorText"></div>
-          <button class="retry-btn" id="retryBtn">Try Again</button>
+        <div style="text-align: center">
+          <a href="/" class="back-link">← Upload another file</a>
         </div>
-      </div>
-
-      <div class="footer">
-        <p>
-          Create your own secure file sharing links at
-          <a href="/">SecureShare</a>
-        </p>
       </div>
     </div>
 
-    <script src="../js/share.js"></script>
+    <script>
+      // Get share ID from URL
+      const shareId = window.location.pathname.split("/").pop();
+
+      // Load file information
+      async function loadFileInfo() {
+        try {
+          const response = await fetch(`/api/file/${shareId}`);
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || "File not found");
+          }
+
+          displayFileInfo(data);
+        } catch (error) {
+          showError(error.message);
+        }
+      }
+
+      // Display file information
+      function displayFileInfo(fileData) {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("fileInfo").style.display = "block";
+
+        // Set file icon based on file type
+        const fileIcon = getFileIcon(fileData.originalName);
+        document.getElementById("fileIcon").textContent = fileIcon;
+
+        document.getElementById("fileName").textContent = fileData.originalName;
+        document.getElementById("fileSize").textContent = formatFileSize(
+          fileData.size
+        );
+        document.getElementById("uploadDate").textContent = new Date(
+          fileData.uploadDate
+        ).toLocaleString();
+
+        // Download info
+        const downloadInfo = document.getElementById("downloadInfo");
+        if (fileData.maxDownloads) {
+          downloadInfo.textContent = `${fileData.downloadCount}/${fileData.maxDownloads}`;
+
+          // Check if download limit reached
+          if (fileData.downloadCount >= fileData.maxDownloads) {
+            document.getElementById("downloadBtn").disabled = true;
+            showWarning("Download limit has been reached for this file.");
+          }
+        } else {
+          downloadInfo.textContent = fileData.downloadCount;
+        }
+
+        // Expiry info
+        const expiryInfo = document.getElementById("expiryInfo");
+        if (fileData.expiryDate) {
+          const expiryDate = new Date(fileData.expiryDate);
+          const now = new Date();
+          const timeLeft = expiryDate - now;
+
+          if (timeLeft > 0) {
+            const hoursLeft = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutesLeft = Math.floor(
+              (timeLeft % (1000 * 60 * 60)) / (1000 * 60)
+            );
+
+            if (hoursLeft > 0) {
+              expiryInfo.textContent = `${hoursLeft}h ${minutesLeft}m`;
+            } else {
+              expiryInfo.textContent = `${minutesLeft}m`;
+            }
+
+            // Show warning if expiring soon
+            if (timeLeft < 60 * 60 * 1000) {
+              // Less than 1 hour
+              showWarning("This file will expire soon!");
+            }
+          } else {
+            expiryInfo.textContent = "Expired";
+            document.getElementById("downloadBtn").disabled = true;
+            showWarning("This file has expired and is no longer available.");
+          }
+        } else {
+          expiryInfo.textContent = "Never";
+        }
+      }
+
+      // Get file icon based on file extension
+      function getFileIcon(filename) {
+        const ext = filename.split(".").pop().toLowerCase();
+        const icons = {
+          // Images
+          jpg: "🖼️",
+          jpeg: "🖼️",
+          png: "🖼️",
+          gif: "🖼️",
+          bmp: "🖼️",
+          svg: "🖼️",
+          // Documents
+          pdf: "📄",
+          doc: "📝",
+          docx: "📝",
+          txt: "📝",
+          rtf: "📝",
+          // Spreadsheets
+          xls: "📊",
+          xlsx: "📊",
+          csv: "📊",
+          // Presentations
+          ppt: "📊",
+          pptx: "📊",
+          // Archives
+          zip: "📦",
+          rar: "📦",
+          "7z": "📦",
+          tar: "📦",
+          gz: "📦",
+          // Audio
+          mp3: "🎵",
+          wav: "🎵",
+          flac: "🎵",
+          aac: "🎵",
+          ogg: "🎵",
+          // Video
+          mp4: "🎬",
+          avi: "🎬",
+          mov: "🎬",
+          wmv: "🎬",
+          flv: "🎬",
+          mkv: "🎬",
+          // Code
+          js: "💻",
+          html: "💻",
+          css: "💻",
+          py: "💻",
+          java: "💻",
+          cpp: "💻",
+          c: "💻",
+          // Default
+          default: "📄",
+        };
+        return icons[ext] || icons["default"];
+      }
+
+      // Download file
+      function downloadFile() {
+        const btn = document.getElementById("downloadBtn");
+        btn.disabled = true;
+        btn.textContent = "Downloading...";
+
+        // Create a temporary link to trigger download
+        const link = document.createElement("a");
+        link.href = `/download/${shareId}`;
+        link.style.display = "none";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        // Re-enable button after a short delay
+        setTimeout(() => {
+          btn.disabled = false;
+          btn.textContent = "📥 Download File";
+        }, 2000);
+      }
+
+      // Show error message
+      function showError(message) {
+        document.getElementById("loading").style.display = "none";
+        document.getElementById("errorMessage").textContent = message;
+        document.getElementById("errorMessage").style.display = "block";
+      }
+
+      // Show warning message
+      function showWarning(message) {
+        document.getElementById("warningMessage").textContent = message;
+        document.getElementById("warningMessage").style.display = "block";
+      }
+
+      // Format file size
+      function formatFileSize(bytes) {
+        if (bytes === 0) return "0 Bytes";
+        const k = 1024;
+        const sizes = ["Bytes", "KB", "MB", "GB", "TB"];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
+      }
+
+      // Load file info when page loads
+      window.addEventListener("load", loadFileInfo);
+    </script>
   </body>
 </html>
